@@ -1,6 +1,7 @@
 package com.cascer.thegameapp.data.remote
 
 import android.util.Log
+import com.cascer.thegameapp.BuildConfig
 import com.cascer.thegameapp.data.remote.network.ApiResponse
 import com.cascer.thegameapp.data.remote.network.ApiService
 import com.cascer.thegameapp.data.remote.response.GameResponse
@@ -8,8 +9,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RemoteDataSource(private val apiService: ApiService) {
+@Singleton
+class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     suspend fun getAllMovie(): Flow<ApiResponse<List<GameResponse>>> {
         return flow {
@@ -27,7 +31,7 @@ class RemoteDataSource(private val apiService: ApiService) {
                 }
             } catch (e: Exception) {
                 emit(ApiResponse.Error(e.toString()))
-                Log.e("RemoteDataSource", e.toString())
+                Log.e("RemoteDataSourceError", e.toString())
             }
         }.flowOn(Dispatchers.IO)
     }

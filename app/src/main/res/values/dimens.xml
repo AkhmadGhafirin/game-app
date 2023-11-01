@@ -2,4 +2,7 @@
 <resources>
     <dimen name="dimens_16dp">16dp</dimen>
     <dimen name="nav_header_height">140dp</dimen>
+    <dimen name="dimen_20dp">20dp</dimen>
+    <dimen name="dimen_300dp">300dp</dimen>
+    <dimen name="dimen_20sp">20sp</dimen>
 </resources>

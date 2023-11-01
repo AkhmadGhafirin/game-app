@@ -9,7 +9,7 @@ data class PlatformResponse(
     @SerializedName("id")
     val id: Int?,
     @SerializedName("image")
-    val image: Any?,
+    val image: String?,
     @SerializedName("image_background")
     val imageBackground: String?,
     @SerializedName("name")
@@ -17,7 +17,7 @@ data class PlatformResponse(
     @SerializedName("slug")
     val slug: String?,
     @SerializedName("year_end")
-    val yearEnd: Any?,
+    val yearEnd: Int?,
     @SerializedName("year_start")
     val yearStart: Int?
 )
