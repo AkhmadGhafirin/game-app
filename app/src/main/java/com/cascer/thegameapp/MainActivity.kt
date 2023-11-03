@@ -10,7 +10,9 @@ import com.cascer.thegameapp.databinding.ActivityMainBinding
 import com.cascer.thegameapp.ui.favorite.FavoriteFragment
 import com.cascer.thegameapp.ui.home.HomeFragment
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding

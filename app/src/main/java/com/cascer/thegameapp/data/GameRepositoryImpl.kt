@@ -9,16 +9,17 @@ import com.cascer.thegameapp.domain.repository.GameRepository
 import com.cascer.thegameapp.utils.AppExecutors
 import com.cascer.thegameapp.utils.DataMapper.toDomain
 import com.cascer.thegameapp.utils.DataMapper.toEntity
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class GameRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
-    private val appExecutors: AppExecutors
+    private val appExecutors: AppExecutors,
+    private val ioDispatcher: CoroutineDispatcher
 ) : GameRepository {
     override fun getAllGame(): Flow<Resource<List<Game>>> =
         object : NetworkBoundResource<List<Game>, List<GameResponse>>() {
@@ -31,11 +32,22 @@ class GameRepositoryImpl @Inject constructor(
 
             override suspend fun saveCallResult(data: List<GameResponse>) {
                 val games = data.map { it.toEntity() }
-                localDataSource.insertGames(games)
+                withContext(ioDispatcher) {
+                    localDataSource.insertGames(games)
+                }
             }
 
-//            override fun shouldFetch(data: List<Game>?): Boolean = data.isNullOrEmpty()
-            override fun shouldFetch(data: List<Game>?): Boolean = true
-
+            override fun shouldFetch(data: List<Game>?): Boolean = data.isNullOrEmpty()
         }.asFlow()
+
+    override fun getFavoriteGames(): Flow<List<Game>> {
+        return localDataSource.getFavoriteGames().map {
+            it.map { game -> game.toDomain() }
+        }
+    }
+
+    override fun setFavoriteGame(game: Game, newState: Boolean) {
+        val entity = game.toEntity()
+        appExecutors.diskIO().execute { localDataSource.setFavoriteGame(entity, newState) }
+    }
 }

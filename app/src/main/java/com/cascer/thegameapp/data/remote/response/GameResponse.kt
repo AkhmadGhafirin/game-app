@@ -57,5 +57,9 @@ data class GameResponse(
     @SerializedName("tba")
     val tba: Boolean?,
     @SerializedName("updated")
-    val updated: String?
+    val updated: String?,
+    @SerializedName("description")
+    val description: String?,
+    @SerializedName("name_original")
+    val nameOriginal: String?,
 )

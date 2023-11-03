@@ -2,7 +2,6 @@ package com.cascer.thegameapp.utils
 
 import com.cascer.thegameapp.data.local.entity.GameEntity
 import com.cascer.thegameapp.data.local.entity.ParentPlatformEntity
-import com.cascer.thegameapp.data.local.entity.PlatformEntity
 import com.cascer.thegameapp.data.remote.response.GameResponse
 import com.cascer.thegameapp.data.remote.response.ParentPlatformResponse
 import com.cascer.thegameapp.domain.model.AddedByStatus
@@ -35,15 +34,53 @@ object DataMapper {
     )
 
     private fun ParentPlatformResponse.toEntity() = ParentPlatformEntity(
-        platform = PlatformEntity(
-            gamesCount = platform?.gamesCount ?: 0,
+        id = platform?.id ?: 0,
+        name = platform?.name.orEmpty(),
+        slug = platform?.slug.orEmpty()
+    )
+
+    fun GameResponse.toDomain() = Game(
+        added = added ?: 0,
+        addedByStatus = AddedByStatus(0, 0, 0, 0, 0, 0),
+        backgroundImage = backgroundImage.orEmpty(),
+        dominantColor = dominantColor.orEmpty(),
+        esrbRating = EsrbRating(0, "", ""),
+        genres = listOf(),
+        id = id ?: 0,
+        metacritic = metacritic ?: 0,
+        name = name.orEmpty(),
+        parentPlatforms = parentPlatforms?.map { it.toDomain() } ?: listOf(),
+        platforms = listOf(),
+        playtime = playtime ?: 0,
+        rating = rating ?: 0.0,
+        ratingTop = ratingTop ?: 0,
+        ratings = listOf(),
+        ratingsCount = ratingsCount ?: 0,
+        released = released.orEmpty(),
+        reviewsCount = reviewsCount ?: 0,
+        reviewsTextCount = reviewsTextCount ?: 0,
+        saturatedColor = saturatedColor.orEmpty(),
+        shortScreenshots = listOf(),
+        slug = slug.orEmpty(),
+        stores = listOf(),
+        suggestionsCount = suggestionsCount ?: 0,
+        tags = listOf(),
+        tba = tba ?: false,
+        updated = updated.orEmpty(),
+        description = description.orEmpty(),
+        nameOriginal = nameOriginal.orEmpty()
+    )
+
+    private fun ParentPlatformResponse.toDomain() = ParentPlatform(
+        platform = Platform(
             id = platform?.id ?: 0,
-            image = platform?.image.orEmpty(),
-            imageBackground = platform?.imageBackground.orEmpty(),
             name = platform?.name.orEmpty(),
             slug = platform?.slug.orEmpty(),
+            image = platform?.image.orEmpty(),
+            imageBackground = platform?.imageBackground.orEmpty(),
+            yearStart = platform?.yearStart ?: 0,
             yearEnd = platform?.yearEnd ?: 0,
-            yearStart = platform?.yearStart ?: 0
+            gamesCount = platform?.gamesCount ?: 0
         )
     )
 
@@ -74,19 +111,21 @@ object DataMapper {
         suggestionsCount = suggestionsCount,
         tags = listOf(),
         tba = tba,
-        updated = updated
+        updated = updated,
+        description = "",
+        nameOriginal = ""
     )
 
     private fun ParentPlatformEntity.toDomain() = ParentPlatform(
         platform = Platform(
-            gamesCount = platform.gamesCount,
-            id = platform.id,
-            image = platform.image,
-            imageBackground = platform.imageBackground,
-            name = platform.name,
-            slug = platform.slug,
-            yearEnd = platform.yearEnd,
-            yearStart = platform.yearStart
+            gamesCount = 0,
+            id = id,
+            image = "",
+            imageBackground = "",
+            name = name,
+            slug = slug,
+            yearEnd = 0,
+            yearStart = 0
         )
     )
 
@@ -113,15 +152,8 @@ object DataMapper {
     )
 
     private fun ParentPlatform.toEntity() = ParentPlatformEntity(
-        platform = PlatformEntity(
-            gamesCount = platform.gamesCount,
-            id = platform.id,
-            image = platform.image,
-            imageBackground = platform.imageBackground,
-            name = platform.name,
-            slug = platform.slug,
-            yearEnd = platform.yearEnd,
-            yearStart = platform.yearStart
-        )
+        id = platform.id,
+        name = platform.name,
+        slug = platform.slug
     )
 }

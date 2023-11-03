@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.cascer.thegameapp.data.local.entity.GameEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -14,5 +15,11 @@ interface GameDao {
     fun getAllGame(): Flow<List<GameEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertGames(data: List<GameEntity>)
+    fun insertGames(data: List<GameEntity>)
+
+    @Query("SELECT * FROM game WHERE isFavorite = 1")
+    fun getFavoriteGames(): Flow<List<GameEntity>>
+
+    @Update
+    fun updateFavoriteGame(game: GameEntity)
 }

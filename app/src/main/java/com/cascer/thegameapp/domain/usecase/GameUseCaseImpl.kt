@@ -9,5 +9,14 @@ import javax.inject.Inject
 class GameUseCaseImpl @Inject constructor(
     private val gameRepository: GameRepository
 ) : GameUseCase {
+
     override fun getAllGame(): Flow<Resource<List<Game>>> = gameRepository.getAllGame()
+
+    override fun getFavoriteGames(): Flow<List<Game>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun setFavoriteGame(game: Game, newState: Boolean) {
+        TODO("Not yet implemented")
+    }
 }

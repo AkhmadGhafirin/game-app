@@ -44,5 +44,7 @@ data class GameEntity(
     @ColumnInfo(name = "updated")
     val updated: String,
     @ColumnInfo(name = "parentPlatforms")
-    val parentPlatforms: List<ParentPlatformEntity>
+    val parentPlatforms: List<ParentPlatformEntity>,
+    @ColumnInfo(name = "isFavorite")
+    var isFavorite: Boolean = false
 )
