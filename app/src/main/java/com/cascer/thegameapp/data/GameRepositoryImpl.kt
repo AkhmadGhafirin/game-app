@@ -9,17 +9,14 @@ import com.cascer.thegameapp.domain.repository.GameRepository
 import com.cascer.thegameapp.utils.AppExecutors
 import com.cascer.thegameapp.utils.DataMapper.toDomain
 import com.cascer.thegameapp.utils.DataMapper.toEntity
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class GameRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors,
-    private val ioDispatcher: CoroutineDispatcher
 ) : GameRepository {
     override fun getAllGame(): Flow<Resource<List<Game>>> =
         object : NetworkBoundResource<List<Game>, List<GameResponse>>() {
@@ -27,15 +24,13 @@ class GameRepositoryImpl @Inject constructor(
                 return localDataSource.getAllGame().map { list -> list.map { it.toDomain() } }
             }
 
-            override suspend fun createCall(): Flow<ApiResponse<List<GameResponse>>> =
-                remoteDataSource.getAllMovie()
-
             override suspend fun saveCallResult(data: List<GameResponse>) {
                 val games = data.map { it.toEntity() }
-                withContext(ioDispatcher) {
-                    localDataSource.insertGames(games)
-                }
+                appExecutors.diskIO().execute { localDataSource.insertGames(games) }
             }
+
+            override suspend fun createCall(): Flow<ApiResponse<List<GameResponse>>> =
+                remoteDataSource.getAllGame()
 
             override fun shouldFetch(data: List<Game>?): Boolean = data.isNullOrEmpty()
         }.asFlow()

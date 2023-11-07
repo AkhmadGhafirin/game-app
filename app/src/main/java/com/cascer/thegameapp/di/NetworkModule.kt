@@ -1,6 +1,7 @@
 package com.cascer.thegameapp.di
 
 import com.cascer.thegameapp.BuildConfig
+import com.cascer.thegameapp.data.remote.network.ApiService
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -26,11 +27,12 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
+    fun provideApiService(okHttpClient: OkHttpClient): ApiService {
+        val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
+        return retrofit.create(ApiService::class.java)
     }
 }

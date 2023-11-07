@@ -1,7 +1,7 @@
 package com.cascer.thegameapp.ui.home
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cascer.thegameapp.data.Resource
 import com.cascer.thegameapp.databinding.FragmentHomeBinding
+import com.cascer.thegameapp.domain.model.Game
 import com.cascer.thegameapp.ui.GameAdapter
+import com.cascer.thegameapp.ui.detail.DetailActivity
 import com.cascer.thegameapp.utils.gone
 import com.cascer.thegameapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +23,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
-    private val gameAdapter by lazy { GameAdapter { } }
+    private val gameAdapter by lazy { GameAdapter { toDetail(it) } }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +36,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView()
+    }
+
+    override fun onResume() {
+        super.onResume()
         setupViewModel()
     }
 
@@ -47,6 +53,12 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun toDetail(game: Game) {
+        startActivity(Intent(requireContext(), DetailActivity::class.java).apply {
+            putExtra(DetailActivity.EXTRA_DATA, game)
+        })
+    }
+
     private fun setupViewModel() {
         with(viewModel) {
             games.observe(viewLifecycleOwner) {
@@ -54,18 +66,24 @@ class HomeFragment : Fragment() {
                     when (it) {
                         is Resource.Success -> {
                             binding.progressbar.gone()
-                            Log.d("HomeFragment", "setupViewModel: ${it.data}")
-                            it.data?.let { data -> gameAdapter.sendData(data) }
+                            it.data?.let { data ->
+                                if (data.isEmpty()) {
+                                    binding.emptyView.root.visible()
+                                    binding.rvList.gone()
+                                } else {
+                                    binding.emptyView.root.gone()
+                                    binding.rvList.visible()
+                                    gameAdapter.sendData(data)
+                                }
+                            }
                         }
 
                         is Resource.Error -> {
                             binding.progressbar.gone()
-                            Log.d("HomeFragment", "setupViewModel: ${it.message}")
                             Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                         }
 
                         is Resource.Loading -> {
-                            Log.d("HomeFragment", "setupViewModel: Loading")
                             binding.progressbar.visible()
                         }
                     }

@@ -10,16 +10,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
-    suspend fun getAllMovie(): Flow<ApiResponse<List<GameResponse>>> {
+    suspend fun getAllGame(): Flow<ApiResponse<List<GameResponse>>> {
         return flow {
             try {
                 val response = apiService.getListGame(
-                    key = BuildConfig.API_KEY,
-                    page = 1,
-                    pageSize = 10
+                    key = BuildConfig.API_KEY, page = 1, pageSize = 10
                 )
                 val dataArray = response.results
                 if (dataArray?.isNotEmpty() == true) {

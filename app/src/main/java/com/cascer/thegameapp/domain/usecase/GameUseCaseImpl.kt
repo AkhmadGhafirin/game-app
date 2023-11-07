@@ -12,11 +12,8 @@ class GameUseCaseImpl @Inject constructor(
 
     override fun getAllGame(): Flow<Resource<List<Game>>> = gameRepository.getAllGame()
 
-    override fun getFavoriteGames(): Flow<List<Game>> {
-        TODO("Not yet implemented")
-    }
+    override fun getFavoriteGames(): Flow<List<Game>> = gameRepository.getFavoriteGames()
 
-    override fun setFavoriteGame(game: Game, newState: Boolean) {
-        TODO("Not yet implemented")
-    }
+    override fun setFavoriteGame(game: Game, newState: Boolean) =
+        gameRepository.setFavoriteGame(game, newState)
 }

@@ -1,17 +1,19 @@
 package com.cascer.thegameapp.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Game(
     val added: Int,
     val addedByStatus: AddedByStatus,
     val backgroundImage: String,
     val dominantColor: String,
-    val description: String,
     val esrbRating: EsrbRating,
     val genres: List<Genre>,
     val id: Int,
     val metacritic: Int,
     val name: String,
-    val nameOriginal: String,
     val parentPlatforms: List<ParentPlatform>,
     val platforms: List<ChildPlatform>,
     val playtime: Int,
@@ -29,5 +31,6 @@ data class Game(
     val suggestionsCount: Int,
     val tags: List<Tag>,
     val tba: Boolean,
-    val updated: String
-)
+    val updated: String,
+    val isFavorite: Boolean,
+) : Parcelable

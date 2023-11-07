@@ -9,7 +9,5 @@ data class ChildPlatformResponse(
     @SerializedName("released_at")
     val releasedAt: String?,
     @SerializedName("requirements_en")
-    val requirementsEn: RequirementsEnResponse?,
-    @SerializedName("requirements_ru")
-    val requirementsRu: Any?
+    val requirementsEn: RequirementsResponse?
 )

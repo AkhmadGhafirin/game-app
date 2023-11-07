@@ -67,8 +67,7 @@ object DataMapper {
         tags = listOf(),
         tba = tba ?: false,
         updated = updated.orEmpty(),
-        description = description.orEmpty(),
-        nameOriginal = nameOriginal.orEmpty()
+        isFavorite = false
     )
 
     private fun ParentPlatformResponse.toDomain() = ParentPlatform(
@@ -112,8 +111,7 @@ object DataMapper {
         tags = listOf(),
         tba = tba,
         updated = updated,
-        description = "",
-        nameOriginal = ""
+        isFavorite = isFavorite
     )
 
     private fun ParentPlatformEntity.toDomain() = ParentPlatform(

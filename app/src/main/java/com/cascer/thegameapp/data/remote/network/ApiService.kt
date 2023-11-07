@@ -1,7 +1,9 @@
 package com.cascer.thegameapp.data.remote.network
 
+import com.cascer.thegameapp.data.remote.response.GameResponse
 import com.cascer.thegameapp.data.remote.response.ListGameResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {

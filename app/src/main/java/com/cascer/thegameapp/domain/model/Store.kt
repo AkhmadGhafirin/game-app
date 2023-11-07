@@ -1,5 +1,9 @@
 package com.cascer.thegameapp.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Store(
     val domain: String,
     val gamesCount: Int,
@@ -7,4 +11,4 @@ data class Store(
     val imageBackground: String,
     val name: String,
     val slug: String
-)
+) : Parcelable
